@@ -3,7 +3,6 @@ A gesture activity support sliding back to the right!
 
 ----
 ## 简介
-这是基于另外一个右滑返回库修改后的[ikew0ng的返回库传送门](https://github.com/ikew0ng/SwipeBackLayout)，感谢！！！我在此库中做了一些修改和处理了右滑时事件的冲突，并精简了许多代码，gif见art目录
 
 原理是在DecorView与LinearLayout之间再加一层DragLayout，然后使用ViewDragHelper处理这个DragLayout。
 
@@ -49,5 +48,6 @@ public interface SwipeLayoutListener {
 }
 
 ```
-
+## 引用
+参考自[ikew0ng的返回库传送门](https://github.com/ikew0ng/SwipeBackLayout)，感谢！！！在此库中做了许多修改、处理了右滑时事件的冲突、没有重写ViewPager，并精简了许多代码，gif见art目录
 
