@@ -2,6 +2,9 @@
 A gesture activity support sliding back to the right!
 
 ----
+
+[ ![Download](https://api.bintray.com/packages/sunzxyong/maven/SwipeBackActivity/images/download.svg) ](https://bintray.com/sunzxyong/maven/SwipeBackActivity/_latestVersion)
+
 ## 简介
 
 原理是在DecorView与LinearLayout之间再加一层DragLayout，然后使用ViewDragHelper处理这个DragLayout。
