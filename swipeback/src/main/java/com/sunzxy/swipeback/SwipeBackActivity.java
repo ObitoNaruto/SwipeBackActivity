@@ -23,13 +23,6 @@ public class SwipeBackActivity extends AppCompatActivity implements ISwipeLayout
         getSwipeBackLayout().attachToActivity(this);
     }
 
-
-    @Override
-    public void finish() {
-        super.finish();
-        this.overridePendingTransition(0, 0);
-    }
-
     @Override
     public View findViewById(int id) {
         View view = super.findViewById(id);
