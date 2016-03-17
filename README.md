@@ -16,14 +16,14 @@ A gesture activity support sliding back to the right!
 <dependency>
   <groupId>com.sunzxy.lib</groupId>
   <artifactId>swipeback</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <type>pom</type>
 </dependency>
 ```
 **Gradle**:
 
 ```java
-compile 'com.sunzxy.lib:swipeback:1.0.0'
+compile 'com.sunzxy.lib:swipeback:1.1.0'
 ```
 
 其中需要在style中当前界面的背景设为透明，否则将看到的是黑色背景看不到下一层的Activity
