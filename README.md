@@ -16,23 +16,30 @@ A gesture activity support sliding back to the right!
 <dependency>
   <groupId>com.sunzxy.lib</groupId>
   <artifactId>swipeback</artifactId>
-  <version>1.1.0</version>
+  <version>1.3.0</version>
   <type>pom</type>
 </dependency>
 ```
 **Gradle**:
 
 ```java
-compile 'com.sunzxy.lib:swipeback:1.1.0'
+compile 'com.sunzxy.lib:swipeback:1.3.0'
 ```
 
-其中需要在style中当前界面的背景设为透明，否则将看到的是黑色背景看不到下一层的Activity
+其中需要在style中将需要侧滑的界面背景设为透明，否则将看到的是黑色背景看不到下一层的Activity
 
 ```
     <item name="android:windowIsTranslucent">true</item>
 ```
 
 新建一个BaseActivity继承于SwipeBackActivity，并后续Activity继承于BaseActivity即可。
+
+默认全部Activity开始侧滑,需禁用侧滑可以使用:
+
+
+```
+    setSwipeBackEnabled(false);
+```
 
 滑动过程中的事件你可使用SwipeLayoutListener监听:
 
