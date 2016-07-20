@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -26,9 +27,13 @@ import java.lang.reflect.Field;
  * Created by zhengxiaoyong on 16/3/4.
  */
 public class SwipeBackLayout extends FrameLayout {
+
     private static final int MIN_FLING_VELOCITY = 50;//dp/s
+
     private static final int MAX_FLING_VELOCITY = 100;//dp/s
+
     private static final int DEFAULT_SCRIM_COLOR = 0x99000000;
+
     private static final int FULL_ALPHA = 255;
     /**
      * 滑动的百分比,当达到这个值则finish当前Activity
@@ -97,7 +102,7 @@ public class SwipeBackLayout extends FrameLayout {
         mRect = new Rect();
         mViewDragHelper = ViewDragHelper.create(this, 1.0f, new ViewDragCallback());
         mViewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
-        setLeftEdgeShadow(context.getResources().getDrawable(R.drawable.shadow));
+        setLeftEdgeShadow(ContextCompat.getDrawable(context, R.drawable.swipe_back_shadow));
         final float density = getResources().getDisplayMetrics().density;
         final float minVelocity = MIN_FLING_VELOCITY * density;
         mViewDragHelper.setMinVelocity(minVelocity);
@@ -184,7 +189,8 @@ public class SwipeBackLayout extends FrameLayout {
                 mViewDragHelper.cancel();
                 break;
         }
-        mViewDragHelper.processTouchEvent(event);
+        if (mViewDragHelper != null)
+            mViewDragHelper.processTouchEvent(event);
         return true;
     }
 
@@ -246,7 +252,11 @@ public class SwipeBackLayout extends FrameLayout {
             if (a.hasValue(0)) {
                 background = a.getResourceId(0, 0);
             }
-            a.recycle();
+            try {
+                a.recycle();
+            } catch (RuntimeException ex) {
+
+            }
         }
         ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();
         ViewGroup decorChild = (ViewGroup) decor.getChildAt(0);

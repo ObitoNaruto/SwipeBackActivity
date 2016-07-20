@@ -8,24 +8,24 @@ import android.view.View;
  * Created by zhengxiaoyong on 16/3/5.
  */
 public class SwipeBackPreferenceActivity extends PreferenceActivity implements ISwipeLayoutExtension {
+
     private SwipeBackLayoutHelper mSwipeBackHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSwipeBackHelper = new SwipeBackLayoutHelper(this);
+        mSwipeBackHelper = SwipeBackLayoutHelper.create(this);
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    public void onContentChanged() {
+        super.onContentChanged();
         getSwipeBackLayout().attachToActivity(this);
     }
 
     @Override
     public void finish() {
         super.finish();
-        this.overridePendingTransition(0, 0);
     }
 
     @Override

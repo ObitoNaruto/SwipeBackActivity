@@ -9,18 +9,24 @@ import android.view.View;
  * Created by zhengxiaoyong on 16/3/4.
  */
 public class SwipeBackActivity extends AppCompatActivity implements ISwipeLayoutExtension {
+
     private SwipeBackLayoutHelper mSwipeBackHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSwipeBackHelper = new SwipeBackLayoutHelper(this);
+        mSwipeBackHelper = SwipeBackLayoutHelper.create(this);
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    public void onContentChanged() {
+        super.onContentChanged();
         getSwipeBackLayout().attachToActivity(this);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 
     @Override
