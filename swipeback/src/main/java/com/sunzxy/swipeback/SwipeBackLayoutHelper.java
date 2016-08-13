@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -37,57 +38,63 @@ public class SwipeBackLayoutHelper {
         return mSwipeBackLayout;
     }
 
-    private void convertActivityToTranslucent(Activity activity) {
+    public void restoreActivityStopMethod(Activity activity) {
+        if (activity == null)
+            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            convertTranslucentToOpaque(activity);
+            convertOpaqueToTranslucent(activity);
+        }
+    }
+
+    private void convertTranslucentToOpaque(Activity activity) {
+        try {
+            Method method = Activity.class.getDeclaredMethod("convertFromTranslucent");
+            method.setAccessible(true);
+            method.invoke(activity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void convertOpaqueToTranslucent(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            convertActivityToTranslucentAfterL(activity);
+            convertOpaqueToTranslucentAfterL(activity);
         } else {
-            convertActivityToTranslucentBeforeL(activity);
+            convertOpaqueToTranslucentBeforeL(activity);
         }
     }
 
     /**
      * Calling the convertToTranslucent method on platforms before Android 5.0
      */
-    private void convertActivityToTranslucentBeforeL(Activity activity) {
+    private static void convertOpaqueToTranslucentBeforeL(Activity activity) {
         try {
-            Class<?>[] classes = Activity.class.getDeclaredClasses();
-            Class<?> translucentConversionListenerClazz = null;
-            for (Class clazz : classes) {
-                if (clazz.getSimpleName().contains("TranslucentConversionListener")) {
-                    translucentConversionListenerClazz = clazz;
-                }
-            }
-            Method method = Activity.class.getDeclaredMethod("convertToTranslucent",
-                    translucentConversionListenerClazz);
+            Field field = Activity.class.getDeclaredField("mTranslucentCallback");
+            field.setAccessible(true);
+            Method method = Activity.class.getDeclaredMethod("convertToTranslucent", field.getType());
             method.setAccessible(true);
-            method.invoke(activity, new Object[]{
-                    null
-            });
-        } catch (Throwable t) {
+            method.invoke(activity, new Object[]{null});
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Calling the convertToTranslucent method on platforms after Android 5.0
      */
-    private void convertActivityToTranslucentAfterL(Activity activity) {
+    private static void convertOpaqueToTranslucentAfterL(Activity activity) {
         try {
-            Method getActivityOptions = Activity.class.getDeclaredMethod("getActivityOptions");
-            getActivityOptions.setAccessible(true);
-            Object options = getActivityOptions.invoke(activity);
-
-            Class<?>[] classes = Activity.class.getDeclaredClasses();
-            Class<?> translucentConversionListenerClazz = null;
-            for (Class clazz : classes) {
-                if (clazz.getSimpleName().contains("TranslucentConversionListener")) {
-                    translucentConversionListenerClazz = clazz;
-                }
-            }
-            Method convertToTranslucent = Activity.class.getDeclaredMethod("convertToTranslucent",
-                    translucentConversionListenerClazz, ActivityOptions.class);
-            convertToTranslucent.setAccessible(true);
-            convertToTranslucent.invoke(activity, null, options);
-        } catch (Throwable t) {
+            Field field = Activity.class.getDeclaredField("mTranslucentCallback");
+            field.setAccessible(true);
+            Method method = Activity.class.getDeclaredMethod("convertToTranslucent", field.getType(), ActivityOptions.class);
+            method.setAccessible(true);
+            Method methodGetOptions = Activity.class.getDeclaredMethod("getActivityOptions");
+            methodGetOptions.setAccessible(true);
+            Object options = methodGetOptions.invoke(activity);
+            method.invoke(activity, null, options);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
